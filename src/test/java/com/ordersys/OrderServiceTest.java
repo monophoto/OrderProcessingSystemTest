@@ -68,7 +68,8 @@ public class OrderServiceTest {
         cart.addItem("P001", 1); // 1200
         cart.addItem("P002", 2); // 50
         cart.addItem("P005", 3); // 30
-        // Subtotal: 1280, shipping: 10, total: 1290
+        // Subtotal: 1280, Total items: 6 (qualifies for bulk discount!)
+        // Bulk discount: 64, Total: 1280 - 64 + 10 = 1226
 
         Product p1 = catalog.getProduct("P001");
         Product p2 = catalog.getProduct("P002");
@@ -79,7 +80,7 @@ public class OrderServiceTest {
 
         OrderResult order = orderService.createOrder(cart, null);
 
-        Assert.assertEquals(order.getTotal(), 1290.00, 0.01);
+        Assert.assertEquals(order.getTotal(), 1226.00, 0.01); // Fixed: includes bulk discount
         Assert.assertEquals(order.getItems().size(), 3);
 
         // Verify all stocks were reserved

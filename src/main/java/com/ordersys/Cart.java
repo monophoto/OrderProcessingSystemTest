@@ -32,12 +32,15 @@ public class Cart {
 
         Product product = catalog.getProduct(productId);
 
-        // Check if there's enough stock available
-        if (quantity > product.getStock()) {
+        // Check cumulative quantity (existing + new) against stock
+        int currentQuantity = items.getOrDefault(productId, 0);
+        int newTotalQuantity = currentQuantity + quantity;
+
+        if (newTotalQuantity > product.getStock()) {
             throw new IllegalArgumentException("Not enough stock for product: " + productId);
         }
 
-        items.put(productId, items.getOrDefault(productId, 0) + quantity);
+        items.put(productId, newTotalQuantity);
     }
 
     /**
